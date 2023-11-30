@@ -1,0 +1,21 @@
+# Node.js
+node_modules/
+
+# MongoDB
+*.db
+
+# Environment variables
+.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependency directory
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
