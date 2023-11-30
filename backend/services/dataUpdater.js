@@ -1,6 +1,7 @@
-const axios = require("axios");
+const axios = require('axios');
+const TaskModel = require('../models/TaskModel');
 
-async function getBitcoinDataForLastYear() {
+const updateOrCreateBitcoinDataInDatabase = async () => {
     try {
         // Şu anki tarih
         const currentDate = new Date();
@@ -24,11 +25,26 @@ async function getBitcoinDataForLastYear() {
         );
 
         const bitcoinData = response.data;
-        console.log(bitcoinData);
+
+        // Mevcut kaydı bul
+        const existingTask = await TaskModel.findOne();
+
+        if (existingTask) {
+            // Mevcut kaydı güncelle
+            existingTask.bitcoinData = bitcoinData;
+        } else {
+            // Eğer kayıt yoksa yeni bir kayıt oluştur
+            const task = new TaskModel({ bitcoinData });
+            await task.save();
+        }
+
+        console.log("Save or update data in MongoDB");
+
+        return { success: true };
     } catch (error) {
-        console.error('Error fetching Bitcoin data:', error);
+        console.error('Error updating or saving data:', error);
+        throw error;
     }
-}
+};
 
-
-module.exports = getBitcoinDataForLastYear;;
+module.exports = { updateOrCreateBitcoinDataInDatabase };

@@ -1,11 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const scheduler = require('./services/scheduler');
-const getBitcoinDataForLastYear = require('./services/dataUpdater'); // dataUpdater modülünü import et
+const scheduler = require('./services/scheduler'); // scheduler modülünü import et
+const getBitcoinDataForLastYear = require('./services/dataUpdater');
+const TaskModel = require('./models/TaskModel'); // Model yolunuza göre güncelleyin
+const apiRouter = require('./routes/api'); // routes klasörünüzün doğru yolunu belirttiğinizden emin olun
 require("dotenv").config();
 
 const cors = require("cors");
 const router = require("./routes/TaskRoute");
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,20 +23,12 @@ mongoose.connect(process.env.MONGO_URI)
 // Remove the useRouter function, it's not needed.
 // Use the router directly
 app.use("/", router);
-
+app.use('/api', apiRouter);
 // Zamanlanmış görevi başlatma
-scheduler;
+scheduler.start(); // scheduler fonksiyonunu başlat
 
-// Bitcoin verilerini çekme endpoint'i
-app.get('/bitcoin-data', async (req, res) => {
-    try {
-        const bitcoinData = await getBitcoinDataForLastYear();
-        res.json(bitcoinData);
-    } catch (error) {
-        console.error('Error fetching Bitcoin data:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
+// Bitcoin verilerini çekme ve MongoDB'ye kaydetme endpoint'i
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

@@ -3,35 +3,35 @@ const TaskModel = require("../models/TaskModel");
 module.exports.getTasks = async (req, res) => {
   try {
     const tasks = await TaskModel.find();
-    res.send(tasks);
+    res.json(tasks);
   } catch (error) {
-    console.error(error);
-    res.status(500).send({ error: error, msg: "Something went wrong" });
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 module.exports.saveTask = async (req, res) => {
-  const { task } = req.body;
+  const { bitcoinData } = req.body;
 
   try {
-    const data = await TaskModel.create({ task });
-    res.status(201).send(data);
+    const task = await TaskModel.create({ bitcoinData });
+    res.status(201).json(task);
   } catch (error) {
-    console.error(error);
-    res.status(500).send({ error: error, msg: "Something went wrong" });
+    console.error('Error saving task:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 module.exports.updateTasks = async (req, res) => {
   const { id } = req.params;
-  const { task } = req.body;
+  const { bitcoinData } = req.body;
 
   try {
-    const updatedTask = await TaskModel.findByIdAndUpdate(id, { task }, { new: true });
-    res.send(updatedTask ? "Updated successfully" : "Task not found");
+    const updatedTask = await TaskModel.findByIdAndUpdate(id, { bitcoinData }, { new: true });
+    res.json(updatedTask ? 'Updated successfully' : 'Task not found');
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Something went wrong");
+    console.error('Error updating task:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
@@ -40,9 +40,9 @@ module.exports.deleteTask = async (req, res) => {
 
   try {
     const deletedTask = await TaskModel.findByIdAndDelete(id);
-    res.send(deletedTask ? "Deleted successfully" : "Task not found");
+    res.json(deletedTask ? 'Deleted successfully' : 'Task not found');
   } catch (error) {
-    console.error(error);
-    res.status(500).send({ error: error, msg: "Something went wrong" });
+    console.error('Error deleting task:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
