@@ -7,11 +7,11 @@ import Navbar from "./components/Navbar";
 function App() {
   return (
     <>
-    <Navbar></Navbar>
+    <Navbar/>
     <Routes>
       
       <Route path="/" element={<Home />} />
-      <Route path="/coindetails" element={<CoinDetails />} />
+      <Route path="/coin/:id" element={<CoinDetails />} />
     </Routes>
     </>
   );

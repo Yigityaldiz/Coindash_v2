@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Trending from "../components/Trending";
 
 export default function Home() {
     const [kriptoBirimler, setKriptoBirimler] = useState([
@@ -39,15 +40,17 @@ export default function Home() {
         fetchData();
     
         // Belirli aralıklarla güncelleme için bir zamanlayıcı ekle (örneğin, her 5 saniyede bir)
-        const intervalId = setInterval(() => {
-          fetchData();
-        }, 1000);
+        // const intervalId = setInterval(() => {
+        //   fetchData();
+        // }, 10000);
     
         // Component unmount olduğunda zamanlayıcıyı temizle
         return () => clearInterval(intervalId);
       }, []); // Boş bağımlılık dizisi sadece componentDidMount benzeri bir davranış elde etmek için
     
       return (
+        <>
+        <Trending/>
         <div className=" ">
          
     
@@ -110,6 +113,7 @@ export default function Home() {
           </div>
          
         </div>
+        </>
       );
     };
     
