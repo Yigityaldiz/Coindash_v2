@@ -4,8 +4,8 @@ import Detail from '../components/Detail'
 
 export default function CoinDetails() {
   return (
-    <div>
-      <HistoryChart/>
+    <div className='flex items-center justify-center h-screen w-screen ' >
+      <HistoryChart />
       <Detail/>
     </div>
   )
