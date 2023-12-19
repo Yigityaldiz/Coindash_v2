@@ -25,6 +25,6 @@ export default function useAxios(param) {
     },[])
 
   return {
-     response , loading , error
+     response , loading , error , fetchData
   }
 }
