@@ -4,6 +4,7 @@ const scheduler = require('./services/scheduler'); // scheduler modülünü impo
 const getBitcoinDataForLastYear = require('./services/dataUpdater');
 const TaskModel = require('./models/TaskModel'); // Model yolunuza göre güncelleyin
 const apiRouter = require('./routes/api'); // routes klasörünüzün doğru yolunu belirttiğinizden emin olun
+
 require("dotenv").config();
 
 const cors = require("cors");
@@ -26,7 +27,7 @@ app.use("/", router);
 app.use('/api', apiRouter);
 // Zamanlanmış görevi başlatma
 scheduler.start(); // scheduler fonksiyonunu başlat
-
+getBitcoinDataForLastYear.updateOrCreateBitcoinDataInDatabase()
 // Bitcoin verilerini çekme ve MongoDB'ye kaydetme endpoint'i
 
 
