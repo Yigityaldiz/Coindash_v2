@@ -8,7 +8,7 @@ const apiRouter = require('./routes/api'); // routes klasörünüzün doğru yol
 require("dotenv").config();
 
 const cors = require("cors");
-const router = require("./routes/TaskRoute");
+
 
 
 const app = express();
@@ -19,16 +19,26 @@ app.use(cors());
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("Mongo is active"))
-    .catch((err) => console.log("MongoDb connect problem ", err));
+    .catch((err) => console.log("MongoDb connect problem ", err)); 
+
+    // mongoose.connect("mongodb://localhost:27017/coindatabase", {
+    //     useNewUrlParser: true,
+    //       useUnifiedTopology: true,
+    //     })
+    //         .then(() => console.log("Mongo is active"))
+    //         .catch((err) => console.log("MongoDb connect problem ", err));
+          
 
 // Remove the useRouter function, it's not needed.
 // Use the router directly
-app.use("/", router);
+
 app.use('/api', apiRouter);
 // Zamanlanmış görevi başlatma
 scheduler.start(); // scheduler fonksiyonunu başlat
-getBitcoinDataForLastYear.updateOrCreateBitcoinDataInDatabase()
-// Bitcoin verilerini çekme ve MongoDB'ye kaydetme endpoint'i
+getBitcoinDataForLastYear.updateCoinsDataInDatabase() ; 
+
+
+
 
 
 app.listen(PORT, () => {

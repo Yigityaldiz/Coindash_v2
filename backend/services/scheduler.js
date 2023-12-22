@@ -3,9 +3,9 @@ const dataUpdater = require('./dataUpdater');
 
 const start = () => {
     // Belirli aralıklarla veri güncelleme görevi
-    cron.schedule('0 3 * * *', async () => {
+    cron.schedule('0 0 4 * *', async () => {
         // Her 30 dakikada bir güncelleme işlemi yapılacak
-        await dataUpdater.updateOrCreateBitcoinDataInDatabase();
+        await dataUpdater.updateCoinsDataInDatabase();
     });
 };
 

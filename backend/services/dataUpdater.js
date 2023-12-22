@@ -1,50 +1,93 @@
 const axios = require('axios');
-const TaskModel = require('../models/TaskModel');
+const CoinModel = require('../models/CoinModel');
 
-const updateOrCreateBitcoinDataInDatabase = async () => {
+const updateCoinsDataInDatabase = async () => {
     try {
-        // Şu anki tarih
-        const currentDate = new Date();
+        // İlk 200 coinin listesini Coingecko API'den al
+        const response = await axios.get('https://api.coingecko.com/api/v3/coins/markets', {
+            params: {
+                vs_currency: 'usd',
+                order: 'market_cap_desc',
+                per_page: 200,
+                page: 1,
+                sparkline: false,
+            },
+        });
 
-        // Bir yıl önceki tarih
-        const lastYearDate = new Date();
-        lastYearDate.setFullYear(currentDate.getFullYear() - 1);
+        const coinsList = response.data;
+        
 
-        // Tarihleri UNIX zamanına çevirme (milisaniye cinsinden)
-        const fromDate = Math.floor(lastYearDate.getTime() / 1000);
-        const toDate = Math.floor(currentDate.getTime() / 1000);
+        // Her bir coin için veritabanına belge ekle
+        for (const coin of coinsList) {
+            try {
+                // Coin verisinin güncellenmesini sağla
 
-        const response = await axios.get(`https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range`,
-            {
-                params: {
-                    vs_currency: 'usd',
-                    from: fromDate,
-                    to: toDate,
-                },
+                const existingCoin = await CoinModel.findOne({ coinId: coin.id });
+
+                if (existingCoin) {
+                    // Coin verisi zaten varsa, güncelle
+                    await delay(20 * 1000);
+                    const coinData = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin.id}/market_chart`, {
+                        params: {
+                            vs_currency: 'usd',
+                            days: 365, // 1 yıl
+                        },
+                    });
+
+                    await CoinModel.updateOne({ coinId: coin.id }, {
+                        $set: {
+                            
+                            marketChartData: coinData.data,
+                            symbol: coin.symbol || "",
+                            name: coin.name || "",
+                        }
+                    });
+
+                    console.log(`Data for coin ${coin.id} updated in MongoDB`);
+                } else {
+                    // Coin verisi yoksa, yeni belge ekle
+                    await delay(20 * 1000);
+                    const coinData = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin.id}/market_chart`, {
+                        params: {
+                            vs_currency: 'usd',
+                            days: 365, // 1 yıl
+                        },
+                    });
+
+                    const newCoin = new CoinModel({
+                        coinId: coin.id,
+                        marketChartData: coinData.data,
+                        symbol: coin.symbol || "",
+                        name: coin.name || "",
+                    });
+
+                    await newCoin.save();
+                    console.log(`Data for coin ${coin.id} added to MongoDB`);
+                }
+                // Her bir coin için 1 dakika beklet
+
+            } catch (updateError) {
+                console.error(`Error updating data for coin ${coin.id}:`, updateError);
             }
-        );
-
-        const bitcoinData = response.data;
-
-        // Mevcut kaydı bul
-        const existingTask = await TaskModel.findOne();
-
-        if (existingTask) {
-            // Mevcut kaydı güncelle
-            existingTask.bitcoinData = bitcoinData;
-        } else {
-            // Eğer kayıt yoksa yeni bir kayıt oluştur
-            const task = new TaskModel({ bitcoinData });
-            await task.save();
         }
 
-        console.log("Save or update data in MongoDB");
+        console.log("Coins data update completed");
 
         return { success: true };
     } catch (error) {
-        console.error('Error updating or saving data:', error);
+        console.error('Error updating coins data:', error);
         throw error;
     }
 };
 
-module.exports = { updateOrCreateBitcoinDataInDatabase };
+
+
+// Belirli bir süre beklemeyi sağlayan fonksiyon
+
+
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// İlk kez çalıştır
+module.exports = { updateCoinsDataInDatabase };
+
+
