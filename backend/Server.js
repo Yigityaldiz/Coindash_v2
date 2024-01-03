@@ -1,10 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const scheduler = require('./services/scheduler'); // scheduler modülünü import et
-const getBitcoinDataForLastYear = require('./services/dataUpdater');
+const dataUpdater = require('./services/dataUpdater');
 const TaskModel = require('./models/TaskModel'); // Model yolunuza göre güncelleyin
 const apiRouter = require('./routes/api'); // routes klasörünüzün doğru yolunu belirttiğinizden emin olun
-
+const coinListUpdater = require('./services/coinListUpdater')
+const trendUpdater = require('./services/trendUpdater')
 require("dotenv").config();
 
 const cors = require("cors");
@@ -29,16 +30,17 @@ mongoose.connect(process.env.MONGO_URI)
     //         .catch((err) => console.log("MongoDb connect problem ", err));
           
 
-// Remove the useRouter function, it's not needed.
-// Use the router directly
+
 
 app.use('/api', apiRouter);
 // Zamanlanmış görevi başlatma
 scheduler.start(); // scheduler fonksiyonunu başlat
-getBitcoinDataForLastYear.updateCoinsDataInDatabase() ; 
 
+dataUpdater.updateCoinsDataInDatabase() ; 
 
+trendUpdater.updateTrendsDataInDatabase() ;
 
+coinListUpdater.updateCoinListDataInDatabase();
 
 
 app.listen(PORT, () => {
