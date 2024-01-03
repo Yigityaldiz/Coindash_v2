@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import useAxios from "../hooks/useAxios";
+
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend } from 'chart.js';
-
+import useAxios from "../hooks/useAxios";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -19,6 +19,8 @@ ChartJS.register(
 export default function HistoryChart() {
   const { id } = useParams();
   const { response } = useAxios(`http://localhost:3000/api/coins`);
+   
+  console.log(response)
   const [coinChartData, setCoinChartData] = useState([]);
 
   useEffect(() => {
@@ -76,3 +78,4 @@ export default function HistoryChart() {
     </div>
   );
 }
+
