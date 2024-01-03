@@ -22,7 +22,7 @@ const updateCoinsDataInDatabase = async () => {
             try {
                 // Coin verisinin güncellenmesini sağla
 
-                const existingCoin = await CoinModel.findOne({ coinId: coin.id });
+                const existingCoin = await CoinModel.findOne();
 
                 if (existingCoin) {
                     // Coin verisi zaten varsa, güncelle
@@ -34,7 +34,7 @@ const updateCoinsDataInDatabase = async () => {
                         },
                     });
 
-                    await CoinModel.updateOne({ coinId: coin.id }, {
+                    await CoinModel.updateOne( {
                         $set: {
                             
                             marketChartData: coinData.data,

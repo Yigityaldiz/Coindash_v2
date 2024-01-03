@@ -3,10 +3,11 @@ import { useEffect, useState } from "react"
 
 
 export default function useAxios(param) {
+    
     const [response, setResponse] = useState(null);
     const [loading , setLoading ]= useState(false);
     const [error , setError] = useState('');
-    axios.defaults.baseURL = 'https://api.coingecko.com/api/v3'
+    
   
     const fetchData = async (param) =>{
         try {
