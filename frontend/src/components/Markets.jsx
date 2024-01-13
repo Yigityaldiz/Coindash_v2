@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Coin from "./Coin";
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/coinList";
+const API_URL = "http://www.coindash.com.tr/api/coinList";
 
 export default function Markets() {
   const [data, setData] = useState(null);
@@ -24,7 +24,7 @@ export default function Markets() {
     const intervalId = setInterval(fetchData, 60000);
 
     return () => clearInterval(intervalId);
-  }, [data]); // Bağımlılık dizisi boş olduğundan, bu useEffect yalnızca bileşen monte edildiğinde çalışır
+  }, []); // Bağımlılık dizisi boş olduğundan, bu useEffect yalnızca bileşen monte edildiğinde çalışır
 
   return (
     <section className="mt-8">

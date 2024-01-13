@@ -3,7 +3,7 @@ import useAxios from "../hooks/useAxios";
 import CoinTrending from "./CoinTrending";
 
 export default function Trending() {
-  const { response } = useAxios("http://localhost:3000/api/trend");
+  const { response } = useAxios("http://www.coindash.com.tr/api/trend");
   
   console.log( "Trend datasi" , response);
   return (
