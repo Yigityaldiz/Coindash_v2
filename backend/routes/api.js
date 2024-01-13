@@ -1,23 +1,16 @@
 // routes/api.js
 const express = require('express');
 const router = express.Router();
-const TaskModel = require('../models/TaskModel');
+
 const CoinModel = require('../models/CoinModel');
 const CoinListModel = require('../models/CoinListModel');
 const TrendModel = require('../models/TrendModel');
+const TrendNftModel = require('../models/TrendNftModel');
 
-const TrendController = require('../controllers/TrendControllers'); // TrendControllers.js dosyasının yolunu kontrol et
+
 
 // Örnek: Bitcoin verilerini getiren endpoint
-router.get('/bitcoin-data', async (req, res) => {
-    try {
-        const bitcoinData = await TaskModel.find();
-        res.json(bitcoinData);
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
+
 
 router.get('/coins', async(req,res)=>{
     try{
@@ -37,13 +30,22 @@ router.get('/coinList', async(req,res)=>{
     }
 })
 
-router.get('/trend', async(req,res)=>{
+router.get('/trendCoin', async(req,res)=>{
     try {
          const trend = await TrendModel.find();
         res.json(trend);
       } catch (error) {
         console.error("Error TrendModel fetching data:", error);
       }
+})
+
+router.get('/trendNft',async(req,res)=>{
+    try{
+        const trendNft = await TrendNftModel.find();
+        res.json(trendNft);
+    } catch(error){
+        console.error("Error trendNft fetcging data:", error  );
+    }
 })
 
 module.exports = router;

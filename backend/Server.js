@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const scheduler = require('./services/scheduler'); // scheduler modülünü import et
 const dataUpdater = require('./services/dataUpdater');
-const TaskModel = require('./models/TaskModel'); // Model yolunuza göre güncelleyin
+
 const apiRouter = require('./routes/api'); // routes klasörünüzün doğru yolunu belirttiğinizden emin olun
 const coinListUpdater = require('./services/coinListUpdater')
 const trendUpdater = require('./services/trendUpdater')
@@ -36,11 +36,11 @@ app.use('/api', apiRouter);
 // Zamanlanmış görevi başlatma
 scheduler.start(); // scheduler fonksiyonunu başlat
 
-dataUpdater.updateCoinsDataInDatabase() ; 
+// dataUpdater.updateCoinsDataInDatabase() ; 
 
 trendUpdater.updateTrendsDataInDatabase() ;
 
-coinListUpdater.updateCoinListDataInDatabase();
+// coinListUpdater.updateCoinListDataInDatabase();
 
 
 app.listen(PORT, () => {
