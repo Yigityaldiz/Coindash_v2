@@ -1,5 +1,6 @@
 const axios = require('axios');
 const TrendModel = require('../models/TrendModel');
+const TrendNftModel = require('../models/TrendNftModel')
 
 const updateTrendsDataInDatabase = async () => {
   try {
@@ -9,6 +10,8 @@ const updateTrendsDataInDatabase = async () => {
 
 
     const trendingData = response.data.coins
+    const trendingNftData = response.data.nfts
+    
     
    
     
@@ -88,8 +91,62 @@ const updateTrendsDataInDatabase = async () => {
       }
     }
 
+    const updatedTrendNfts = [];
+    for (const nft of trendingNftData) {
+      const trendNftExists = await TrendNftModel.exists({ id: nft.id });
+    
+      if (trendNftExists) {
+        // Varolan NFT Trendini Güncelle
+        const updatedTrendNft = await TrendNftModel.findOneAndUpdate({ id: nft.id }, {
+          $set: {
+            nftContractId: nft.nft_contract_id,
+            name: nft.name,
+            symbol: nft.symbol,
+            thumb: nft.thumb,
+            nativeCurrencySymbol: nft.native_currency_symbol,
+            floorPriceInNativeCurrency: nft.floor_price_in_native_currency,
+            floorPrice24hPercentageChange: nft.floor_price_24h_percentage_change,
+            data: {
+              floorPrice: nft.data.floor_price,
+              floorPriceInUsd24hPercentageChange: nft.data.floor_price_in_usd_24h_percentage_change,
+              h24Volume: nft.data.h24_volume,
+              h24AverageSalePrice: nft.data.h24_average_sale_price,
+              sparkline: nft.data.sparkline,
+              content: nft.data.content
+            },
+          },
+        }, { new: true });
+    
+        updatedTrendNfts.push(updatedTrendNft);
+      } else {
+        // Yeni NFT Trendi Ekle
+        const newTrendNft = new TrendNftModel({
+          id: nft.id,
+          nftContractId: nft.nft_contract_id,
+            name: nft.name,
+            symbol: nft.symbol,
+            thumb: nft.thumb,
+            nativeCurrencySymbol: nft.native_currency_symbol,
+            floorPriceInNativeCurrency: nft.floor_price_in_native_currency,
+            floorPrice24hPercentageChange: nft.floor_price_24h_percentage_change,
+            data: {
+              floorPrice: nft.data.floor_price,
+              floorPriceInUsd24hPercentageChange: nft.data.floor_price_in_usd_24h_percentage_change,
+              h24Volume: nft.data.h24_volume,
+              h24AverageSalePrice: nft.data.h24_average_sale_price,
+              sparkline: nft.data.sparkline,
+              content: nft.data.content
+          },
+        });
+    
+        await newTrendNft.save();
+        updatedTrendNfts.push(newTrendNft);
+        console.log("nft datasi pushlandi", newTrendNft)
+      }
+    }
+
     // Güncelleme Tamamlama
-    console.log("Trends data update completed");
+    console.log("Trends data update completed",trendingNftData);
     return { success: true, updatedTrends };
   } catch (error) {
     console.error('Error updating trends data:', error);

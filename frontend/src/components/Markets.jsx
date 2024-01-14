@@ -21,7 +21,7 @@ export default function Markets() {
     fetchData();
 
     // Opsiyonel: Belirli bir aralıkla veriyi tekrar yükle
-    const intervalId = setInterval(fetchData, 60000);
+    const intervalId = setInterval(fetchData, 20000);
 
     return () => clearInterval(intervalId);
   }, []); // Bağımlılık dizisi boş olduğundan, bu useEffect yalnızca bileşen monte edildiğinde çalışır
