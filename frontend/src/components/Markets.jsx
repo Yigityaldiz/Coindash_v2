@@ -12,7 +12,7 @@ export default function Markets() {
       try {
         const response = await axios.get(API_URL);
         setData(response.data);
-        console.log("Veri yüklendi:", response.data);
+       
       } catch (error) {
         console.error('Error fetching data:', error);
       }
