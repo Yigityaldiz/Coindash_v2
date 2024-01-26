@@ -10,11 +10,11 @@ const start = () => {
         await dataUpdater.updateCoinsDataInDatabase();
     });
 
-    // cron.schedule('* * * * *', async () => {
-    //     console.log("anlik veri guncellendi");
+    cron.schedule('* * * * *', async () => {
+        console.log("anlik veri guncellendi");
         
-    //     await coinListUpdater.updateCoinListDataInDatabase();
-    // });
+        await coinListUpdater.updateCoinListDataInDatabase();
+    });
 
     cron.schedule('* * * * *', async () => {
       

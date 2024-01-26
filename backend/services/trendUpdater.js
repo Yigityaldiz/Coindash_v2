@@ -141,7 +141,7 @@ const updateTrendsDataInDatabase = async () => {
     
         await newTrendNft.save();
         updatedTrendNfts.push(newTrendNft);
-        console.log("nft datasi pushlandi", newTrendNft)
+        
       }
     }
 

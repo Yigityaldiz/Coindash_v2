@@ -1,7 +1,9 @@
-import { useState } from "react";
-import { Route, Routes, NavLink, Link } from "react-router-dom";
+
+import { Route, Routes} from "react-router-dom";
 import CoinDetails from "./pages/CoinDetails";
+import './index.css'
 import Home from "./pages/Home";
+import About from "./pages/About";
 import Navbar from "./components/Navbar";
 
 function App() {
@@ -12,7 +14,8 @@ function App() {
       
       <Route path="/" element={<Home />} />
       <Route path="/coin/:id" element={<CoinDetails />} />
-    </Routes>
+      <Route path="/about" element={<About/>}
+/>    </Routes>
     </>
   );
 }

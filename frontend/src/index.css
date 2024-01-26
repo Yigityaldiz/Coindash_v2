@@ -1,3 +1,44 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.about-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  
+}
+
+.about-content {
+  
+  color: white;
+  margin: 20px;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.about-content h1 {
+  color: #ffd700; /* Altın rengi */
+  font-size: 2em;
+}
+
+.about-content h2 {
+  color: #adff2f; /* Yeşilimsi sarı */
+  font-size: 1.5em;
+}
+
+.about-content h3 {
+  color: #00ced1; /* Koyu turkuaz */
+  font-size: 1.3em;
+}
+
+.about-content p {
+  font-size: 1em;
+  line-height: 1.6;
+}
+
+.about-content ul, .about-content ol {
+  margin-left: 20px;
+}
